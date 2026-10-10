@@ -6,6 +6,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import ServiceWorkerRegister from './components/ServiceWorkerRegister';
 import Analytics from './components/Analytics';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({
   subsets: ['latin'],
@@ -128,6 +129,10 @@ export default function RootLayout({ children }) {
         <Script id="theme-init" strategy="beforeInteractive">{`
 (function(){try{var t=localStorage.getItem('cyc-theme');if(t==='dark'){document.documentElement.classList.add('dark')}else if(t==='light'){document.documentElement.classList.remove('dark')}else if(window.matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.classList.add('dark')}}catch(e){}})();
         `}</Script>
+
+
+        <meta name="google-site-verification" content="vjVmNeKdMsx_nA_TItPFT9QMjLkwzjbvpXpLR7mVUxQ" />
+
       </head>
       <body className={`${inter.variable} font-sans antialiased bg-[var(--color-bg)] text-[var(--color-text-1)] transition-colors`}>
         {/* Skip link — first focusable element for keyboard/AT users */}
