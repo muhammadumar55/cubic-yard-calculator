@@ -1,0 +1,1090 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Cubic Yard Calculator| Fast Dirt, Mulch & Concrete Estimator</title>
+  <meta name="description" content="Free online cubic yard calculator. Quickly calculate the exact volume of mulch, gravel, topsoil, or concrete needed for your project in cubic yards. Includes weight and cost estimators." />
+  <link rel="canonical" href="https://example.com/" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Cubic Yard Calculator| Fast Dirt, Mulch & Concrete Estimator" />
+  <meta property="og:description" content="Free online cubic yard calculator. Quickly calculate the exact volume of mulch, gravel, topsoil, or concrete needed for your project in cubic yards. Includes weight and cost estimators." />
+  <meta property="og:url" content="https://example.com/" />
+  <meta property="og:image" content="https://example.com/icon.svg" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Cubic Yard Calculator| Fast Dirt, Mulch & Concrete Estimator" />
+  <meta name="twitter:description" content="Free online cubic yard calculator. Quickly calculate the exact volume of mulch, gravel, topsoil, or concrete needed for your project in cubic yards. Includes weight and cost estimators." />
+  <meta name="twitter:image" content="https://example.com/icon.svg" />
+
+  <!-- PWA -->
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./icon.svg" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style>
+    :root { color-scheme: light; }
+    html { scroll-behavior: smooth; }
+    /* Improve tap targets and prevent layout shift from focus rings */
+    :focus-visible { outline: 3px solid rgba(59,130,246,.9); outline-offset: 2px; }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type="number"] { -moz-appearance: textfield; }
+
+    /* Accordion animation without layout thrash */
+    .acc-panel { grid-template-rows: 0fr; }
+    .acc-panel[data-open="true"] { grid-template-rows: 1fr; }
+    .acc-panel > div { overflow: hidden; }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .transition-safe { transition: none !important; }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "Cubic Yard Calculator",
+        "url": "https://example.com/", 
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Works in modern browsers.",
+        "description": "Calculate cubic yards for concrete, gravel, topsoil, mulch, sand, and other bulk materials. Includes waste margin, weight, and cost estimators.",
+        "featureList": [
+          "Rectangular slab cubic yard calculator",
+          "Circular area cubic yard calculator",
+          "Triangular area cubic yard calculator",
+          "Cubic feet/inches/meters to cubic yards conversion",
+          "Material weight estimates (lbs and tons)",
+          "Cost estimator per cubic yard",
+          "Waste margin buffer"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is a cubic yard?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A cubic yard (yd³) is a unit of volume equal to a cube that is 3 feet long × 3 feet wide × 3 feet tall. It equals 27 cubic feet. Bulk materials like mulch, gravel, topsoil, and concrete are commonly sold by the cubic yard."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How many bags of concrete make a cubic yard?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "One cubic yard is 27 cubic feet. A typical 80-lb bag yields about 0.60 cu ft (about 45 bags per yard), and a typical 60-lb bag yields about 0.45 cu ft (about 60 bags per yard). Check your bag’s yield label for the most accurate estimate."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much area does 1 cubic yard of mulch cover at a 3-inch depth?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "At 3 inches deep (0.25 ft), 1 cubic yard (27 cu ft) covers about 108 square feet (27 ÷ 0.25). Many landscapers use a quick rule of thumb of about 100 square feet per yard at 3 inches."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do you convert cubic feet directly to cubic yards?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Divide cubic feet by 27. Example: 54 cu ft ÷ 27 = 2 yd³."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body class="bg-slate-50 text-slate-900 antialiased">
+  <a href="#calculator" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-3 focus:left-3 bg-white shadow px-3 py-2 rounded">Skip to calculator</a>
+
+  <!-- Above-the-fold calculator (top of viewport) -->
+  <header id="calculator" class="bg-gradient-to-b from-slate-900 to-slate-800 text-white">
+    <div class="mx-auto max-w-5xl px-4 pt-5 pb-6 sm:pt-7 sm:pb-8">
+      <div class="flex flex-col gap-2">
+        <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">Cubic Yard Calculator</h1>
+        <p class="text-slate-200 text-sm sm:text-base max-w-3xl">Instantly calculate cubic yards for concrete, gravel, topsoil, mulch, sand, and more. Includes waste margin, weight in tons/lbs, and a cost estimator.</p>
+      </div>
+
+      <section class="mt-5 rounded-2xl bg-white/95 text-slate-900 shadow-lg ring-1 ring-white/15 backdrop-blur">
+        <div class="p-4 sm:p-6">
+          <div class="flex flex-col gap-4">
+            <!-- Tabs -->
+            <div>
+              <div class="flex flex-wrap gap-2" role="tablist" aria-label="Calculation modes">
+                <button class="tab-btn transition-safe rounded-full px-3 py-2 text-sm font-medium bg-slate-900 text-white" role="tab" aria-selected="true" aria-controls="panel-rect" id="tab-rect" data-tab="rect">Rectangular</button>
+                <button class="tab-btn transition-safe rounded-full px-3 py-2 text-sm font-medium bg-slate-100 text-slate-900 hover:bg-slate-200" role="tab" aria-selected="false" aria-controls="panel-circ" id="tab-circ" data-tab="circ">Circular</button>
+                <button class="tab-btn transition-safe rounded-full px-3 py-2 text-sm font-medium bg-slate-100 text-slate-900 hover:bg-slate-200" role="tab" aria-selected="false" aria-controls="panel-tri" id="tab-tri" data-tab="tri">Triangular</button>
+                <button class="tab-btn transition-safe rounded-full px-3 py-2 text-sm font-medium bg-slate-100 text-slate-900 hover:bg-slate-200" role="tab" aria-selected="false" aria-controls="panel-conv" id="tab-conv" data-tab="conv">Convert Volume</button>
+              </div>
+              <p class="mt-2 text-xs text-slate-600">Tip: enter feet + inches for dimensions. Depth can be entered in inches or feet.</p>
+            </div>
+
+            <!-- Panels -->
+            <div class="grid gap-4">
+              <div id="panel-rect" class="tab-panel" role="tabpanel" aria-labelledby="tab-rect">
+                <div class="grid gap-4 md:grid-cols-3">
+                  <fieldset class="rounded-xl border border-slate-200 p-3">
+                    <legend class="px-1 text-sm font-semibold text-slate-800">Length</legend>
+                    <div class="mt-2 grid grid-cols-2 gap-2">
+                      <div>
+                        <label class="text-xs text-slate-700" for="rect-length-ft">Feet</label>
+                        <input id="rect-length-ft" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g., 12" />
+                      </div>
+                      <div>
+                        <label class="text-xs text-slate-700" for="rect-length-in">Inches</label>
+                        <input id="rect-length-in" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g., 6" />
+                      </div>
+                    </div>
+                  </fieldset>
+
+                  <fieldset class="rounded-xl border border-slate-200 p-3">
+                    <legend class="px-1 text-sm font-semibold text-slate-800">Width</legend>
+                    <div class="mt-2 grid grid-cols-2 gap-2">
+                      <div>
+                        <label class="text-xs text-slate-700" for="rect-width-ft">Feet</label>
+                        <input id="rect-width-ft" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g., 10" />
+                      </div>
+                      <div>
+                        <label class="text-xs text-slate-700" for="rect-width-in">Inches</label>
+                        <input id="rect-width-in" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g., 0" />
+                      </div>
+                    </div>
+                  </fieldset>
+
+                  <fieldset class="rounded-xl border border-slate-200 p-3">
+                    <legend class="px-1 text-sm font-semibold text-slate-800">Depth</legend>
+                    <div class="mt-2 grid grid-cols-3 gap-2">
+                      <div class="col-span-2">
+                        <label class="text-xs text-slate-700" for="rect-depth">Depth</label>
+                        <input id="rect-depth" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g., 4" />
+                      </div>
+                      <div>
+                        <label class="text-xs text-slate-700" for="rect-depth-unit">Unit</label>
+                        <select id="rect-depth-unit" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                          <option value="in" selected>in</option>
+                          <option value="ft">ft</option>
+                        </select>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+
+              <div id="panel-circ" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-circ">
+                <div class="grid gap-4 md:grid-cols-2">
+                  <fieldset class="rounded-xl border border-slate-200 p-3">
+                    <legend class="px-1 text-sm font-semibold text-slate-800">Diameter</legend>
+                    <div class="mt-2 grid grid-cols-2 gap-2">
+                      <div>
+                        <label class="text-xs text-slate-700" for="circ-diam-ft">Feet</label>
+                        <input id="circ-diam-ft" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g., 3" />
+                      </div>
+                      <div>
+                        <label class="text-xs text-slate-700" for="circ-diam-in">Inches</label>
+                        <input id="circ-diam-in" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g., 0" />
+                      </div>
+                    </div>
+                    <p class="mt-2 text-xs text-slate-600">Uses area = πr².</p>
+                  </fieldset>
+
+                  <fieldset class="rounded-xl border border-slate-200 p-3">
+                    <legend class="px-1 text-sm font-semibold text-slate-800">Depth</legend>
+                    <div class="mt-2 grid grid-cols-3 gap-2">
+                      <div class="col-span-2">
+                        <label class="text-xs text-slate-700" for="circ-depth">Depth</label>
+                        <input id="circ-depth" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g., 24" />
+                      </div>
+                      <div>
+                        <label class="text-xs text-slate-700" for="circ-depth-unit">Unit</label>
+                        <select id="circ-depth-unit" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                          <option value="in" selected>in</option>
+                          <option value="ft">ft</option>
+                        </select>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+
+              <div id="panel-tri" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-tri">
+                <div class="grid gap-4 md:grid-cols-3">
+                  <fieldset class="rounded-xl border border-slate-200 p-3">
+                    <legend class="px-1 text-sm font-semibold text-slate-800">Base</legend>
+                    <div class="mt-2 grid grid-cols-2 gap-2">
+                      <div>
+                        <label class="text-xs text-slate-700" for="tri-base-ft">Feet</label>
+                        <input id="tri-base-ft" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g., 8" />
+                      </div>
+                      <div>
+                        <label class="text-xs text-slate-700" for="tri-base-in">Inches</label>
+                        <input id="tri-base-in" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g., 0" />
+                      </div>
+                    </div>
+                  </fieldset>
+
+                  <fieldset class="rounded-xl border border-slate-200 p-3">
+                    <legend class="px-1 text-sm font-semibold text-slate-800">Height</legend>
+                    <div class="mt-2 grid grid-cols-2 gap-2">
+                      <div>
+                        <label class="text-xs text-slate-700" for="tri-height-ft">Feet</label>
+                        <input id="tri-height-ft" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g., 6" />
+                      </div>
+                      <div>
+                        <label class="text-xs text-slate-700" for="tri-height-in">Inches</label>
+                        <input id="tri-height-in" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g., 0" />
+                      </div>
+                    </div>
+                    <p class="mt-2 text-xs text-slate-600">Uses area = ½ × base × height.</p>
+                  </fieldset>
+
+                  <fieldset class="rounded-xl border border-slate-200 p-3">
+                    <legend class="px-1 text-sm font-semibold text-slate-800">Depth</legend>
+                    <div class="mt-2 grid grid-cols-3 gap-2">
+                      <div class="col-span-2">
+                        <label class="text-xs text-slate-700" for="tri-depth">Depth</label>
+                        <input id="tri-depth" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g., 3" />
+                      </div>
+                      <div>
+                        <label class="text-xs text-slate-700" for="tri-depth-unit">Unit</label>
+                        <select id="tri-depth-unit" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                          <option value="in" selected>in</option>
+                          <option value="ft">ft</option>
+                        </select>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+
+              <div id="panel-conv" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-conv">
+                <div class="grid gap-4 md:grid-cols-2">
+                  <fieldset class="rounded-xl border border-slate-200 p-3">
+                    <legend class="px-1 text-sm font-semibold text-slate-800">Convert to Cubic Yards</legend>
+                    <div class="mt-2 grid grid-cols-3 gap-2">
+                      <div class="col-span-2">
+                        <label class="text-xs text-slate-700" for="conv-value">Volume</label>
+                        <input id="conv-value" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" type="number" min="0" step="0.0001" inputmode="decimal" placeholder="e.g., 54" />
+                      </div>
+                      <div>
+                        <label class="text-xs text-slate-700" for="conv-unit">Unit</label>
+                        <select id="conv-unit" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                          <option value="ft3" selected>cu ft</option>
+                          <option value="in3">cu in</option>
+                          <option value="m3">cu m</option>
+                          <option value="yd3">cu yd</option>
+                        </select>
+                      </div>
+                    </div>
+                    <p class="mt-2 text-xs text-slate-600">Common conversion: cu ft ÷ 27 = cu yd.</p>
+                  </fieldset>
+
+                  <div class="rounded-xl border border-slate-200 p-3">
+                    <h2 class="text-sm font-semibold text-slate-800">Quick conversions</h2>
+                    <dl class="mt-2 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                      <div>
+                        <dt class="text-xs text-slate-600">Cubic yards</dt>
+                        <dd class="font-semibold" id="conv-out-yd3">—</dd>
+                      </div>
+                      <div>
+                        <dt class="text-xs text-slate-600">Cubic feet</dt>
+                        <dd class="font-semibold" id="conv-out-ft3">—</dd>
+                      </div>
+                      <div>
+                        <dt class="text-xs text-slate-600">Cubic inches</dt>
+                        <dd class="font-semibold" id="conv-out-in3">—</dd>
+                      </div>
+                      <div>
+                        <dt class="text-xs text-slate-600">Cubic meters</dt>
+                        <dd class="font-semibold" id="conv-out-m3">—</dd>
+                      </div>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Estimators (shared) -->
+            <div class="grid gap-4 md:grid-cols-3">
+              <fieldset class="rounded-xl border border-slate-200 p-3">
+                <legend class="px-1 text-sm font-semibold text-slate-800">Material (optional)</legend>
+                <label class="text-xs text-slate-700" for="material">Material type</label>
+                <select id="material" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                  <option value="" selected>No material selected</option>
+                  <option value="concrete">Concrete</option>
+                  <option value="gravel">Gravel</option>
+                  <option value="topsoil">Topsoil</option>
+                  <option value="mulch">Mulch</option>
+                  <option value="sand">Sand</option>
+                  <option value="crushedstone">Crushed Stone</option>
+                </select>
+                <p class="mt-2 text-xs text-slate-600" id="density-note">Select a material to estimate weight (lbs & tons).</p>
+              </fieldset>
+
+              <fieldset class="rounded-xl border border-slate-200 p-3">
+                <legend class="px-1 text-sm font-semibold text-slate-800">Waste margin</legend>
+                <div class="flex items-center justify-between gap-3">
+                  <label class="text-xs text-slate-700" for="waste">Waste margin</label>
+                  <output id="waste-out" class="text-xs font-semibold text-slate-900">10%</output>
+                </div>
+                <input id="waste" class="mt-2 w-full" type="range" min="0" max="30" step="1" value="10" />
+                <p class="mt-2 text-xs text-slate-600">Add extra volume for spillage, compaction, and uneven grades.</p>
+              </fieldset>
+
+              <fieldset class="rounded-xl border border-slate-200 p-3">
+                <legend class="px-1 text-sm font-semibold text-slate-800">Cost estimator</legend>
+                <div class="mt-2 grid grid-cols-3 gap-2">
+                  <div class="col-span-2">
+                    <label class="text-xs text-slate-700" for="price">Price</label>
+                    <input id="price" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g., 55" />
+                  </div>
+                  <div>
+                    <label class="text-xs text-slate-700" for="price-unit">Unit</label>
+                    <select id="price-unit" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                      <option value="yd3" selected>per yd³</option>
+                      <option value="ton">per ton</option>
+                    </select>
+                  </div>
+                </div>
+                <p class="mt-2 text-xs text-slate-600" id="price-help">Choose per yd³ for most suppliers. Use per ton when pricing is weight-based (requires material selection).</p>
+              </fieldset>
+            </div>
+
+            <!-- Results -->
+            <section class="rounded-2xl bg-slate-900 text-white p-4 sm:p-5" aria-label="Results">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <h2 class="text-base sm:text-lg font-semibold">Results</h2>
+                  <p class="text-xs text-slate-300">Updates in real time as you type.</p>
+                </div>
+                <button id="copy" class="rounded-lg bg-white/10 hover:bg-white/15 px-3 py-2 text-xs font-medium transition-safe" type="button">Copy summary</button>
+              </div>
+
+              <div class="mt-4 grid gap-3 md:grid-cols-3" aria-live="polite">
+                <div class="rounded-xl bg-white/10 p-3">
+                  <div class="text-xs text-slate-300">Cubic yards (yd³)</div>
+                  <div class="mt-1 text-2xl font-semibold" id="out-yd3">—</div>
+                  <div class="mt-1 text-xs text-slate-300" id="out-yd3-note">Enter dimensions to calculate.</div>
+                </div>
+
+                <div class="rounded-xl bg-white/10 p-3">
+                  <div class="text-xs text-slate-300">With waste margin</div>
+                  <div class="mt-1 text-2xl font-semibold" id="out-yd3-waste">—</div>
+                  <div class="mt-1 text-xs text-slate-300">Adjusted order quantity</div>
+                </div>
+
+                <div class="rounded-xl bg-white/10 p-3">
+                  <div class="text-xs text-slate-300">Cubic feet (cu ft)</div>
+                  <div class="mt-1 text-2xl font-semibold" id="out-ft3">—</div>
+                  <div class="mt-1 text-xs text-slate-300">(yd³ × 27)</div>
+                </div>
+              </div>
+
+              <div class="mt-3 grid gap-3 md:grid-cols-3">
+                <div class="rounded-xl bg-white/10 p-3">
+                  <div class="text-xs text-slate-300">Estimated weight</div>
+                  <div class="mt-1 text-base font-semibold" id="out-weight">—</div>
+                  <div class="mt-1 text-xs text-slate-300" id="out-weight-note">Select a material to estimate weight.</div>
+                </div>
+                <div class="rounded-xl bg-white/10 p-3">
+                  <div class="text-xs text-slate-300">Estimated cost</div>
+                  <div class="mt-1 text-base font-semibold" id="out-cost">—</div>
+                  <div class="mt-1 text-xs text-slate-300" id="out-cost-note">Add price per yard to estimate cost.</div>
+                </div>
+                <div class="rounded-xl bg-white/10 p-3">
+                  <div class="text-xs text-slate-300">Metric reference</div>
+                  <div class="mt-1 text-base font-semibold" id="out-m3">—</div>
+                  <div class="mt-1 text-xs text-slate-300">Cubic meters (m³)</div>
+                </div>
+              </div>
+
+              <p class="mt-4 text-xs text-slate-300">Estimates vary with moisture content, compaction, and supplier specs. For engineered pours, consult project plans and local code requirements.</p>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <nav class="mt-4 flex flex-wrap gap-3 text-sm text-slate-200">
+        <a class="underline underline-offset-4 hover:text-white" href="#manual">How to calculate</a>
+        <a class="underline underline-offset-4 hover:text-white" href="#weights">Material weights</a>
+        <a class="underline underline-offset-4 hover:text-white" href="#faq">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-5xl px-4 py-10">
+    <!-- PHASE 4: On-page content hubs -->
+    <section id="manual" class="scroll-mt-20">
+      <h2 class="text-xl sm:text-2xl font-semibold tracking-tight">How to Calculate Cubic Yards manually</h2>
+      <div class="mt-3 text-slate-800 leading-relaxed">
+        <p class="text-sm sm:text-base">If you want to double-check your order without a tool, the core formula is:</p>
+        <p class="mt-2 font-semibold">(Length in Feet × Width in Feet × Depth in Feet) ÷ 27 = Cubic Yards</p>
+        <h3 class="mt-5 text-base sm:text-lg font-semibold">Step-by-step</h3>
+        <ol class="mt-2 list-decimal pl-5 space-y-2 text-sm sm:text-base">
+          <li>Measure <strong>length</strong> and <strong>width</strong> in feet.</li>
+          <li>Measure <strong>depth</strong>. If you measured depth in inches, convert to feet: <strong>depth (ft) = depth (in) ÷ 12</strong>.</li>
+          <li>Multiply to get cubic feet: <strong>ft³ = L × W × D</strong>.</li>
+          <li>Convert cubic feet to cubic yards by dividing by 27: <strong>yd³ = ft³ ÷ 27</strong>.</li>
+        </ol>
+        <p class="mt-3 text-sm text-slate-700">Example: 12 ft × 10 ft × 4 in deep → depth = 4/12 = 0.333 ft → ft³ = 12×10×0.333 ≈ 40 → yd³ = 40/27 ≈ 1.48 yd³.</p>
+      </div>
+    </section>
+
+    <section id="weights" class="mt-10 scroll-mt-20">
+      <h2 class="text-xl sm:text-2xl font-semibold tracking-tight">Material Weight Variations Per Cubic Yard</h2>
+      <p class="mt-2 text-slate-700 text-sm">These are common planning averages used by contractors. Actual delivered weight varies by moisture content and compaction.</p>
+
+      <div class="mt-4 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-slate-50">
+            <tr>
+              <th scope="col" class="px-4 py-3 font-semibold text-slate-900">Material Type</th>
+              <th scope="col" class="px-4 py-3 font-semibold text-slate-900">Avg. Weight per Cubic Yard (lbs)</th>
+              <th scope="col" class="px-4 py-3 font-semibold text-slate-900">Avg. Weight per Cubic Yard (Tons)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr>
+              <td class="px-4 py-3">Concrete</td>
+              <td class="px-4 py-3">4,050</td>
+              <td class="px-4 py-3">2.03</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3">Topsoil</td>
+              <td class="px-4 py-3">2,200</td>
+              <td class="px-4 py-3">1.10</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3">Gravel</td>
+              <td class="px-4 py-3">2,800</td>
+              <td class="px-4 py-3">1.40</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3">Mulch</td>
+              <td class="px-4 py-3">800</td>
+              <td class="px-4 py-3">0.40</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3">Sand</td>
+              <td class="px-4 py-3">2,700</td>
+              <td class="px-4 py-3">1.35</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="faq" class="mt-10 scroll-mt-20">
+      <h2 class="text-xl sm:text-2xl font-semibold tracking-tight">Frequently Asked Questions (FAQ)</h2>
+
+      <div class="mt-4 grid gap-3">
+        <article class="rounded-2xl border border-slate-200 bg-white">
+          <h3>
+            <button class="acc-btn w-full flex items-center justify-between gap-4 px-4 py-4 text-left" aria-expanded="false">
+              <span class="font-semibold">What is a cubic yard?</span>
+              <span class="acc-icon inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-900">+</span>
+            </button>
+          </h3>
+          <div class="acc-panel grid" data-open="false">
+            <div>
+              <div class="px-4 pb-4 text-sm text-slate-700">
+                A cubic yard (yd³) is a unit of volume equal to <strong>27 cubic feet</strong>. Think of a box that’s <strong>3 ft × 3 ft × 3 ft</strong>. Bulk materials like mulch, gravel, topsoil, and concrete are commonly sold by the yard.
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="rounded-2xl border border-slate-200 bg-white">
+          <h3>
+            <button class="acc-btn w-full flex items-center justify-between gap-4 px-4 py-4 text-left" aria-expanded="false">
+              <span class="font-semibold">How many bags of concrete make a cubic yard?</span>
+              <span class="acc-icon inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-900">+</span>
+            </button>
+          </h3>
+          <div class="acc-panel grid" data-open="false">
+            <div>
+              <div class="px-4 pb-4 text-sm text-slate-700">
+                One cubic yard is <strong>27 cu ft</strong>. Many 80-lb bags yield about <strong>0.60 cu ft</strong> each (≈ <strong>45 bags</strong> per yard), and many 60-lb bags yield about <strong>0.45 cu ft</strong> each (≈ <strong>60 bags</strong> per yard). Always confirm the yield printed on your bag.
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="rounded-2xl border border-slate-200 bg-white">
+          <h3>
+            <button class="acc-btn w-full flex items-center justify-between gap-4 px-4 py-4 text-left" aria-expanded="false">
+              <span class="font-semibold">How much area does 1 cubic yard of mulch cover at a 3-inch depth?</span>
+              <span class="acc-icon inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-900">+</span>
+            </button>
+          </h3>
+          <div class="acc-panel grid" data-open="false">
+            <div>
+              <div class="px-4 pb-4 text-sm text-slate-700">
+                At <strong>3 inches</strong> (0.25 ft) deep, one cubic yard (27 cu ft) covers about <strong>108 sq ft</strong> (27 ÷ 0.25). A common landscaping rule of thumb is about <strong>~100 sq ft</strong> per yard at 3-inch depth.
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="rounded-2xl border border-slate-200 bg-white">
+          <h3>
+            <button class="acc-btn w-full flex items-center justify-between gap-4 px-4 py-4 text-left" aria-expanded="false">
+              <span class="font-semibold">How do you convert cubic feet directly to cubic yards?</span>
+              <span class="acc-icon inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-900">+</span>
+            </button>
+          </h3>
+          <div class="acc-panel grid" data-open="false">
+            <div>
+              <div class="px-4 pb-4 text-sm text-slate-700">
+                Divide cubic feet by <strong>27</strong>. Example: <strong>54 cu ft ÷ 27 = 2 yd³</strong>.
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-lg font-semibold tracking-tight">Professional notes</h2>
+      <ul class="mt-2 text-sm text-slate-700 list-disc pl-5">
+        <li><strong>Compaction:</strong> gravel and crushed stone often compact 10–15% depending on gradation.</li>
+        <li><strong>Moisture:</strong> wet soil/sand can weigh significantly more than dry material.</li>
+        <li><strong>Delivery:</strong> confirm maximum truck payload limits using the weight estimator.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="mx-auto max-w-5xl px-4 py-8 text-sm text-slate-600">
+      <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <p><strong>Cubic Yard Calculator</strong> — lightweight, client-side estimator.</p>
+        <p class="text-xs">© <span id="year"></span> • Built for fast field estimates</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const MATERIALS = {
+        concrete: { label: 'Concrete', lbsPerYd3: 4050 },
+        gravel: { label: 'Gravel', lbsPerYd3: 2800 },
+        topsoil: { label: 'Topsoil', lbsPerYd3: 2200 },
+        mulch: { label: 'Mulch', lbsPerYd3: 800 },
+        sand: { label: 'Sand', lbsPerYd3: 2700 },
+        crushedstone: { label: 'Crushed Stone', lbsPerYd3: 2700 }
+      };
+
+      const els = {
+        // Tabs
+        tabBtns: Array.from(document.querySelectorAll('.tab-btn')),
+        panels: {
+          rect: document.getElementById('panel-rect'),
+          circ: document.getElementById('panel-circ'),
+          tri: document.getElementById('panel-tri'),
+          conv: document.getElementById('panel-conv')
+        },
+
+        // Rect
+        rectLengthFt: document.getElementById('rect-length-ft'),
+        rectLengthIn: document.getElementById('rect-length-in'),
+        rectWidthFt: document.getElementById('rect-width-ft'),
+        rectWidthIn: document.getElementById('rect-width-in'),
+        rectDepth: document.getElementById('rect-depth'),
+        rectDepthUnit: document.getElementById('rect-depth-unit'),
+
+        // Circ
+        circDiamFt: document.getElementById('circ-diam-ft'),
+        circDiamIn: document.getElementById('circ-diam-in'),
+        circDepth: document.getElementById('circ-depth'),
+        circDepthUnit: document.getElementById('circ-depth-unit'),
+
+        // Tri
+        triBaseFt: document.getElementById('tri-base-ft'),
+        triBaseIn: document.getElementById('tri-base-in'),
+        triHeightFt: document.getElementById('tri-height-ft'),
+        triHeightIn: document.getElementById('tri-height-in'),
+        triDepth: document.getElementById('tri-depth'),
+        triDepthUnit: document.getElementById('tri-depth-unit'),
+
+        // Converter
+        convValue: document.getElementById('conv-value'),
+        convUnit: document.getElementById('conv-unit'),
+        convOutYd3: document.getElementById('conv-out-yd3'),
+        convOutFt3: document.getElementById('conv-out-ft3'),
+        convOutIn3: document.getElementById('conv-out-in3'),
+        convOutM3: document.getElementById('conv-out-m3'),
+
+        // Shared
+        material: document.getElementById('material'),
+        densityNote: document.getElementById('density-note'),
+        waste: document.getElementById('waste'),
+        wasteOut: document.getElementById('waste-out'),
+        price: document.getElementById('price'),
+        priceUnit: document.getElementById('price-unit'),
+
+        // Outputs
+        outYd3: document.getElementById('out-yd3'),
+        outYd3Waste: document.getElementById('out-yd3-waste'),
+        outYd3Note: document.getElementById('out-yd3-note'),
+        outFt3: document.getElementById('out-ft3'),
+        outM3: document.getElementById('out-m3'),
+        outWeight: document.getElementById('out-weight'),
+        outWeightNote: document.getElementById('out-weight-note'),
+        outCost: document.getElementById('out-cost'),
+        outCostNote: document.getElementById('out-cost-note'),
+
+        copy: document.getElementById('copy'),
+        year: document.getElementById('year')
+      };
+
+      const STORAGE_KEY = 'cyc_state_v1';
+      let activeTab = 'rect';
+
+      function n(v) {
+        const x = Number(v);
+        return Number.isFinite(x) ? x : 0;
+      }
+
+      function clampNonNegative(x) {
+        return x < 0 ? 0 : x;
+      }
+
+      function feetFromFtIn(ft, inch) {
+        return clampNonNegative(n(ft)) + clampNonNegative(n(inch)) / 12;
+      }
+
+      function depthFeet(value, unit) {
+        const v = clampNonNegative(n(value));
+        return unit === 'ft' ? v : v / 12;
+      }
+
+      function yd3FromFt3(ft3) {
+        return ft3 / 27;
+      }
+
+      function ft3FromYd3(yd3) {
+        return yd3 * 27;
+      }
+
+      function m3FromYd3(yd3) {
+        // 1 yd³ = 0.764554857984 m³
+        return yd3 * 0.764554857984;
+      }
+
+      function in3FromYd3(yd3) {
+        // 1 yd = 36 in -> 36^3 = 46656 in^3
+        return yd3 * 46656;
+      }
+
+      function yd3FromIn3(in3) {
+        return in3 / 46656;
+      }
+
+      function yd3FromM3(m3) {
+        // 1 m³ = 1.307950619314392 yd³
+        return m3 * 1.307950619314392;
+      }
+
+      function fmt(x, digits = 2) {
+        if (!Number.isFinite(x) || x <= 0) return '—';
+        return x.toLocaleString(undefined, { maximumFractionDigits: digits, minimumFractionDigits: x < 1 ? Math.min(digits, 2) : 0 });
+      }
+
+      function money(x) {
+        if (!Number.isFinite(x) || x <= 0) return '—';
+        return x.toLocaleString(undefined, { style: 'currency', currency: 'USD' });
+      }
+
+      function getWasteMultiplier() {
+        const pct = clampNonNegative(n(els.waste.value));
+        return 1 + pct / 100;
+      }
+
+      function calculateBaseYd3() {
+        if (activeTab === 'conv') {
+          const value = clampNonNegative(n(els.convValue.value));
+          const unit = els.convUnit.value;
+          if (!value) return 0;
+          if (unit === 'yd3') return value;
+          if (unit === 'ft3') return value / 27;
+          if (unit === 'in3') return yd3FromIn3(value);
+          if (unit === 'm3') return yd3FromM3(value);
+          return 0;
+        }
+
+        if (activeTab === 'rect') {
+          const L = feetFromFtIn(els.rectLengthFt.value, els.rectLengthIn.value);
+          const W = feetFromFtIn(els.rectWidthFt.value, els.rectWidthIn.value);
+          const D = depthFeet(els.rectDepth.value, els.rectDepthUnit.value);
+          if (!L || !W || !D) return 0;
+          return yd3FromFt3(L * W * D);
+        }
+
+        if (activeTab === 'circ') {
+          const diam = feetFromFtIn(els.circDiamFt.value, els.circDiamIn.value);
+          const D = depthFeet(els.circDepth.value, els.circDepthUnit.value);
+          if (!diam || !D) return 0;
+          const r = diam / 2;
+          const area = Math.PI * r * r;
+          return yd3FromFt3(area * D);
+        }
+
+        if (activeTab === 'tri') {
+          const base = feetFromFtIn(els.triBaseFt.value, els.triBaseIn.value);
+          const height = feetFromFtIn(els.triHeightFt.value, els.triHeightIn.value);
+          const D = depthFeet(els.triDepth.value, els.triDepthUnit.value);
+          if (!base || !height || !D) return 0;
+          const area = 0.5 * base * height;
+          return yd3FromFt3(area * D);
+        }
+
+        return 0;
+      }
+
+      function updateConverterOutputs(yd3) {
+        if (activeTab !== 'conv') return;
+        const ft3 = ft3FromYd3(yd3);
+        const m3 = m3FromYd3(yd3);
+        const in3 = in3FromYd3(yd3);
+        els.convOutYd3.textContent = fmt(yd3, 4) + ' yd³';
+        els.convOutFt3.textContent = fmt(ft3, 3) + ' ft³';
+        els.convOutIn3.textContent = fmt(in3, 0) + ' in³';
+        els.convOutM3.textContent = fmt(m3, 4) + ' m³';
+      }
+
+      function updateDensityNote() {
+        const key = els.material.value;
+        if (!key) {
+          els.densityNote.textContent = 'Select a material to estimate weight (lbs & tons).';
+          return;
+        }
+        const mat = MATERIALS[key];
+        els.densityNote.textContent = `${mat.label} average: ${mat.lbsPerYd3.toLocaleString()} lbs per yd³ (approx.).`;
+      }
+
+      function updateOutputs() {
+        const baseYd3 = calculateBaseYd3();
+        const adjustedYd3 = baseYd3 * getWasteMultiplier();
+        const ft3 = ft3FromYd3(baseYd3);
+        const m3 = m3FromYd3(baseYd3);
+
+        els.outYd3.textContent = fmt(baseYd3, 3);
+        els.outYd3Waste.textContent = fmt(adjustedYd3, 3);
+        els.outFt3.textContent = fmt(ft3, 2);
+        els.outM3.textContent = fmt(m3, 3);
+
+        els.outYd3Note.textContent = baseYd3 > 0 ? 'Base volume (before waste).' : 'Enter dimensions to calculate.';
+
+        // Weight
+        const matKey = els.material.value;
+        let adjLbs = 0;
+        let adjTons = 0;
+        if (matKey && adjustedYd3 > 0) {
+          adjLbs = adjustedYd3 * MATERIALS[matKey].lbsPerYd3;
+          adjTons = adjLbs / 2000;
+          els.outWeight.textContent = `${fmt(adjLbs, 0)} lbs (${fmt(adjTons, 2)} tons)`;
+          els.outWeightNote.textContent = `Based on ${MATERIALS[matKey].lbsPerYd3.toLocaleString()} lbs/yd³ and adjusted volume.`;
+        } else {
+          els.outWeight.textContent = '—';
+          els.outWeightNote.textContent = matKey ? 'Enter dimensions to estimate weight.' : 'Select a material to estimate weight.';
+        }
+
+        // Cost
+        const price = clampNonNegative(n(els.price.value));
+        const priceUnit = els.priceUnit ? els.priceUnit.value : 'yd3';
+        if (price > 0 && adjustedYd3 > 0) {
+          if (priceUnit === 'yd3') {
+            els.outCost.textContent = money(adjustedYd3 * price);
+            els.outCostNote.textContent = `${fmt(adjustedYd3, 3)} yd³ × ${money(price)} per yd³`;
+          } else if (priceUnit === 'ton') {
+            if (matKey && adjTons > 0) {
+              els.outCost.textContent = money(adjTons * price);
+              els.outCostNote.textContent = `${fmt(adjTons, 2)} tons × ${money(price)} per ton`;
+            } else {
+              els.outCost.textContent = '—';
+              els.outCostNote.textContent = 'Select a material to estimate tons for per-ton pricing.';
+            }
+          } else {
+            els.outCost.textContent = '—';
+            els.outCostNote.textContent = 'Choose a valid price unit.';
+          }
+        } else {
+          els.outCost.textContent = '—';
+          if (price > 0) {
+            els.outCostNote.textContent = 'Enter dimensions to estimate cost.';
+          } else {
+            els.outCostNote.textContent = 'Add price and unit to estimate cost.';
+          }
+        }
+
+        updateConverterOutputs(baseYd3);
+        persistState();
+      }
+
+      function setTab(nextTab) {
+        activeTab = nextTab;
+
+        // Buttons
+        for (const btn of els.tabBtns) {
+          const isActive = btn.dataset.tab === nextTab;
+          btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+          btn.className = btn.className
+            .replace(/bg-slate-900 text-white/g, '')
+            .replace(/bg-slate-100 text-slate-900 hover:bg-slate-200/g, '')
+            .trim();
+          btn.classList.add('tab-btn', 'transition-safe', 'rounded-full', 'px-3', 'py-2', 'text-sm', 'font-medium');
+          if (isActive) {
+            btn.classList.add('bg-slate-900', 'text-white');
+          } else {
+            btn.classList.add('bg-slate-100', 'text-slate-900', 'hover:bg-slate-200');
+          }
+        }
+
+        // Panels
+        Object.entries(els.panels).forEach(([key, panel]) => {
+          panel.classList.toggle('hidden', key !== nextTab);
+        });
+
+        updateOutputs();
+      }
+
+      function bindTabs() {
+        els.tabBtns.forEach((btn) => {
+          btn.addEventListener('click', () => setTab(btn.dataset.tab));
+          btn.addEventListener('keydown', (e) => {
+            if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+            e.preventDefault();
+            const idx = els.tabBtns.indexOf(btn);
+            const next = e.key === 'ArrowRight' ? idx + 1 : idx - 1;
+            const wrap = (next + els.tabBtns.length) % els.tabBtns.length;
+            els.tabBtns[wrap].focus();
+            setTab(els.tabBtns[wrap].dataset.tab);
+          });
+        });
+      }
+
+      function bindInputs() {
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach((el) => {
+          el.addEventListener('input', () => {
+            if (el === els.waste) {
+              els.wasteOut.textContent = `${els.waste.value}%`;
+            }
+            if (el === els.material) updateDensityNote();
+            updateOutputs();
+          });
+          el.addEventListener('change', () => {
+            if (el === els.waste) {
+              els.wasteOut.textContent = `${els.waste.value}%`;
+            }
+            if (el === els.material) updateDensityNote();
+            updateOutputs();
+          });
+        });
+
+        els.copy.addEventListener('click', async () => {
+          const base = calculateBaseYd3();
+          const adj = base * getWasteMultiplier();
+          const matKey = els.material.value;
+          const price = clampNonNegative(n(els.price.value));
+          const priceUnit = els.priceUnit ? els.priceUnit.value : 'yd3';
+
+          const lines = [];
+          lines.push(`Cubic yards (base): ${base > 0 ? fmt(base, 3) + ' yd³' : '—'}`);
+          lines.push(`Cubic yards (with waste): ${adj > 0 ? fmt(adj, 3) + ' yd³' : '—'}`);
+          if (matKey && adj > 0) {
+            const lbs = adj * MATERIALS[matKey].lbsPerYd3;
+            const tons = lbs / 2000;
+            lines.push(`Material: ${MATERIALS[matKey].label}`);
+            lines.push(`Estimated weight: ${fmt(lbs, 0)} lbs (${fmt(tons, 2)} tons)`);
+
+            if (price > 0 && priceUnit === 'ton') {
+              lines.push(`Price: ${money(price)} per ton`);
+              lines.push(`Estimated cost: ${money(tons * price)}`);
+            }
+          }
+          if (price > 0 && adj > 0 && priceUnit === 'yd3') {
+            lines.push(`Price: ${money(price)} per yd³`);
+            lines.push(`Estimated cost: ${money(adj * price)}`);
+          }
+
+          const text = lines.join('\n');
+          try {
+            await navigator.clipboard.writeText(text);
+            els.copy.textContent = 'Copied!';
+            setTimeout(() => (els.copy.textContent = 'Copy summary'), 1200);
+          } catch {
+            // Fallback
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            els.copy.textContent = 'Copied!';
+            setTimeout(() => (els.copy.textContent = 'Copy summary'), 1200);
+          }
+        });
+      }
+
+      function bindAccordion() {
+        const btns = document.querySelectorAll('.acc-btn');
+        btns.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const panel = btn.parentElement.nextElementSibling;
+            const icon = btn.querySelector('.acc-icon');
+            const open = panel.getAttribute('data-open') === 'true';
+            panel.setAttribute('data-open', open ? 'false' : 'true');
+            btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+            if (icon) icon.textContent = open ? '+' : '–';
+          });
+        });
+      }
+
+      function persistState() {
+        const state = {
+          activeTab,
+          values: {
+            'rect-length-ft': els.rectLengthFt.value,
+            'rect-length-in': els.rectLengthIn.value,
+            'rect-width-ft': els.rectWidthFt.value,
+            'rect-width-in': els.rectWidthIn.value,
+            'rect-depth': els.rectDepth.value,
+            'rect-depth-unit': els.rectDepthUnit.value,
+
+            'circ-diam-ft': els.circDiamFt.value,
+            'circ-diam-in': els.circDiamIn.value,
+            'circ-depth': els.circDepth.value,
+            'circ-depth-unit': els.circDepthUnit.value,
+
+            'tri-base-ft': els.triBaseFt.value,
+            'tri-base-in': els.triBaseIn.value,
+            'tri-height-ft': els.triHeightFt.value,
+            'tri-height-in': els.triHeightIn.value,
+            'tri-depth': els.triDepth.value,
+            'tri-depth-unit': els.triDepthUnit.value,
+
+            'conv-value': els.convValue.value,
+            'conv-unit': els.convUnit.value,
+
+            material: els.material.value,
+            waste: els.waste.value,
+            price: els.price.value,
+            priceUnit: els.priceUnit ? els.priceUnit.value : 'yd3'
+          }
+        };
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch { /* ignore */ }
+      }
+
+      function restoreState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          const state = JSON.parse(raw);
+          if (!state || typeof state !== 'object') return;
+
+          const v = state.values || {};
+          const setIf = (id, val) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (val === undefined || val === null) return;
+            el.value = String(val);
+          };
+
+          Object.keys(v).forEach((key) => {
+            if (key === 'material') return;
+            if (key === 'waste') return;
+            if (key === 'price') return;
+            if (key === 'conv-unit') return;
+            if (key.endsWith('-unit')) return;
+            // handled below
+          });
+
+          // Rect
+          setIf('rect-length-ft', v['rect-length-ft']);
+          setIf('rect-length-in', v['rect-length-in']);
+          setIf('rect-width-ft', v['rect-width-ft']);
+          setIf('rect-width-in', v['rect-width-in']);
+          setIf('rect-depth', v['rect-depth']);
+          setIf('rect-depth-unit', v['rect-depth-unit']);
+
+          // Circ
+          setIf('circ-diam-ft', v['circ-diam-ft']);
+          setIf('circ-diam-in', v['circ-diam-in']);
+          setIf('circ-depth', v['circ-depth']);
+          setIf('circ-depth-unit', v['circ-depth-unit']);
+
+          // Tri
+          setIf('tri-base-ft', v['tri-base-ft']);
+          setIf('tri-base-in', v['tri-base-in']);
+          setIf('tri-height-ft', v['tri-height-ft']);
+          setIf('tri-height-in', v['tri-height-in']);
+          setIf('tri-depth', v['tri-depth']);
+          setIf('tri-depth-unit', v['tri-depth-unit']);
+
+          // Converter
+          setIf('conv-value', v['conv-value']);
+          setIf('conv-unit', v['conv-unit']);
+
+          // Shared
+          if (typeof v.material === 'string') els.material.value = v.material;
+          if (v.waste !== undefined) els.waste.value = String(v.waste);
+          if (v.price !== undefined) els.price.value = String(v.price);
+          if (els.priceUnit && typeof v.priceUnit === 'string') els.priceUnit.value = v.priceUnit;
+
+          if (typeof state.activeTab === 'string' && els.panels[state.activeTab]) {
+            activeTab = state.activeTab;
+          }
+        } catch { /* ignore */ }
+      }
+
+      function registerSW() {
+        if (!('serviceWorker' in navigator)) return;
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').catch(() => {});
+        });
+      }
+
+      function init() {
+        els.year.textContent = String(new Date().getFullYear());
+        bindTabs();
+        bindInputs();
+        bindAccordion();
+        restoreState();
+        els.wasteOut.textContent = `${els.waste.value}%`;
+        updateDensityNote();
+        setTab(activeTab);
+        registerSW();
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
