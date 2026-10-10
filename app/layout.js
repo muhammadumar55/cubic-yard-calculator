@@ -6,6 +6,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import ServiceWorkerRegister from './components/ServiceWorkerRegister';
 import Analytics from './components/Analytics';
+import { Analytics as VercelAnalytics } from '@vercel/analytics/next';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -148,6 +149,9 @@ export default function RootLayout({ children }) {
 
         {/* Analytics (opt-in, only if env vars set) */}
         {GA4_ID && <Analytics />}
+
+        {/* Vercel Web Analytics */}
+        <VercelAnalytics />
       </body>
     </html>
   );
