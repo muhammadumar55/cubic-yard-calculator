@@ -2,17 +2,431 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: light; }
-html { scroll-behavior: smooth; }
+/* ============================================================
+   DESIGN TOKENS (CSS custom properties)
+   ============================================================ */
+:root {
+  --color-bg:          #f8fafc;
+  --color-surface:     #ffffff;
+  --color-surface-2:   #f1f5f9;
+  --color-border:      #e2e8f0;
+  --color-border-2:    #cbd5e1;
+  --color-text-1:      #0f172a;
+  --color-text-2:      #334155;
+  --color-text-3:      #64748b;
+  --color-text-4:      #94a3b8;
+  --color-primary:     #0ea5e9;
+  --color-primary-dark:#0284c7;
+  --color-accent:      #14b8a6;
+  --color-success:     #22c55e;
+  --color-warning:     #f59e0b;
+  --color-error:       #ef4444;
+  --color-header-bg:   #0f172a;
+  --color-result-bg:   #0f172a;
 
-/* Improve tap targets and prevent layout shift from focus rings */
-:focus-visible { outline: 3px solid rgba(59,130,246,.9); outline-offset: 2px; }
+  color-scheme: light;
+}
 
-/* Remove number spinners where possible */
+.dark {
+  --color-bg:          #0a1628;
+  --color-surface:     #0f2040;
+  --color-surface-2:   #162035;
+  --color-border:      #1e3a5f;
+  --color-border-2:    #1e4080;
+  --color-text-1:      #f1f5f9;
+  --color-text-2:      #cbd5e1;
+  --color-text-3:      #94a3b8;
+  --color-text-4:      #64748b;
+  --color-primary:     #38bdf8;
+  --color-primary-dark:#0ea5e9;
+  --color-accent:      #2dd4bf;
+  --color-header-bg:   #060d1a;
+  --color-result-bg:   #060d1a;
+
+  color-scheme: dark;
+}
+
+/* ============================================================
+   BASE RESETS & GLOBAL STYLES
+   ============================================================ */
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-1);
+  transition: background-color 0.2s ease, color 0.2s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevent horizontal scroll globally */
+html, body { overflow-x: hidden; }
+
+/* ============================================================
+   FOCUS STYLES (WCAG 2.2 AA)
+   ============================================================ */
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Remove default focus ring only when focus-visible is applied */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ============================================================
+   FORM ELEMENTS
+   ============================================================ */
+/* Prevent iOS zoom on inputs (font-size must be >= 16px) */
+input, select, textarea {
+  font-size: 16px;
+}
+
+/* Remove number spinners */
 input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 input[type="number"] { -moz-appearance: textfield; }
 
+/* Range slider base styles */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  height: 6px;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  background: var(--color-border-2);
+  border-radius: 9999px;
+  height: 6px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  margin-top: -7px;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+input[type="range"]::-moz-range-track {
+  background: var(--color-border-2);
+  border-radius: 9999px;
+  height: 6px;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: 2px solid white;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+
+/* ============================================================
+   DETAILS / SUMMARY (FAQ accordions)
+   ============================================================ */
+details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* ============================================================
+   TYPOGRAPHY UTILITIES
+   ============================================================ */
+.prose-content {
+  max-width: 70ch;
+  line-height: 1.7;
+}
+
+.prose-content h2 {
+  font-size: 1.375rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-1);
+}
+
+.prose-content h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-1);
+}
+
+.prose-content p {
+  margin-bottom: 1rem;
+  color: var(--color-text-2);
+}
+
+.prose-content ul, .prose-content ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text-2);
+}
+
+.prose-content li {
+  margin-bottom: 0.35rem;
+}
+
+.prose-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.prose-content th,
+.prose-content td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.prose-content th {
+  background-color: var(--color-surface-2);
+  font-weight: 600;
+}
+
+.prose-content code {
+  background-color: var(--color-surface-2);
+  border-radius: 0.25rem;
+  padding: 0.1em 0.35em;
+  font-size: 0.875em;
+  font-family: ui-monospace, monospace;
+}
+
+/* Horizontal scroll for tables on small screens */
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-border);
+}
+
+/* ============================================================
+   COMPONENT LAYER
+   ============================================================ */
+@layer components {
+  /* Card */
+  .card {
+    @apply bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-card transition-shadow;
+  }
+  .card:hover {
+    @apply shadow-card-hover;
+  }
+
+  /* Button variants */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary-600 text-white hover:bg-primary-700 focus-visible:outline-primary-600 px-5 py-2.5 text-sm;
+  }
+
+  .btn-secondary {
+    @apply btn bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-600 px-4 py-2 text-sm;
+  }
+
+  .btn-ghost {
+    @apply btn text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 px-3 py-2 text-sm;
+  }
+
+  /* Input */
+  .input {
+    @apply w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2.5 text-base text-slate-900 dark:text-slate-100 transition placeholder-slate-400 dark:placeholder-slate-500;
+    min-height: 44px;
+  }
+  .input:focus {
+    @apply border-primary-500 ring-2 ring-primary-500/20 outline-none;
+  }
+
+  /* Select */
+  .select {
+    @apply input appearance-none bg-no-repeat pr-8;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236b7280'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-position: right 0.5rem center;
+    background-size: 1.25rem;
+  }
+
+  /* Label */
+  .label {
+    @apply block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1;
+  }
+
+  /* Badge / chip */
+  .chip {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-medium border transition-colors cursor-pointer;
+    min-height: 32px;
+  }
+  .chip-active {
+    @apply chip bg-primary-600 text-white border-primary-600;
+  }
+  .chip-inactive {
+    @apply chip bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-600 hover:border-primary-400;
+  }
+
+  /* Result value */
+  .result-value {
+    @apply text-4xl font-bold tabular-nums;
+  }
+
+  /* Section separator */
+  .section-divider {
+    @apply border-t border-slate-200 dark:border-slate-700 my-10;
+  }
+
+  /* Callout / tip box */
+  .callout {
+    @apply rounded-xl border-l-4 px-4 py-3 text-sm;
+  }
+  .callout-tip {
+    @apply callout bg-primary-50 dark:bg-primary-950/30 border-primary-400 text-primary-900 dark:text-primary-200;
+  }
+  .callout-warning {
+    @apply callout bg-amber-50 dark:bg-amber-950/30 border-amber-400 text-amber-900 dark:text-amber-200;
+  }
+  .callout-info {
+    @apply callout bg-slate-50 dark:bg-slate-800 border-slate-400 text-slate-700 dark:text-slate-300;
+  }
+
+  /* Skip link */
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:shadow-lg focus:text-primary-700 focus:outline-2 focus:outline-primary-600;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb-item {
+    @apply text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   PRINT STYLESHEET
+   ============================================================ */
+@media print {
+  /* Show only calculator and results */
+  header, footer, nav, .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+    font-size: 12pt;
+  }
+
+  main {
+    padding: 0;
+    max-width: 100%;
+  }
+
+  .print-show {
+    display: block !important;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 10pt;
+    color: #666;
+  }
+
+  /* Don't print URLs for internal links */
+  a[href^="/"]:after,
+  a[href^="#"]:after {
+    content: "";
+  }
+
+  .result-value {
+    font-size: 24pt;
+    font-weight: bold;
+  }
+
+  /* Break page before major sections */
+  h2 { page-break-before: avoid; }
+  h3 { page-break-after: avoid; }
+  table { page-break-inside: avoid; }
+}
+
+/* ============================================================
+   SCROLLBAR STYLING (Webkit)
+   ============================================================ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-2);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-3); }
+
+/* ============================================================
+   HEADER HEIGHT RESERVE (prevents CLS from sticky header)
+   ============================================================ */
+:root { --header-height: 64px; }
+@media (min-width: 768px) { :root { --header-height: 72px; } }
+
+/* ============================================================
+   UTILITY: visually hidden but accessible
+   ============================================================ */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ============================================================
+   LOADING SKELETON
+   ============================================================ */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.skeleton {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  background-color: var(--color-surface-2);
+  border-radius: 0.5rem;
 }

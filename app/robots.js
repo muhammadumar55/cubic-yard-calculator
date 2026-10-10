@@ -1,4 +1,6 @@
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com';
+import { SITE_URL } from '../lib/site.js';
+
+export const dynamic = 'force-static';
 
 export default function robots() {
   return {
@@ -6,6 +8,6 @@ export default function robots() {
       userAgent: '*',
       allow: '/'
     },
-    sitemap: `${siteUrl}/sitemap.xml`
+    sitemap: `${SITE_URL}/sitemap.xml`
   };
 }

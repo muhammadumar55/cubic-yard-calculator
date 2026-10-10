@@ -1,161 +1,153 @@
 import './globals.css';
-import Link from 'next/link';
+import { Inter } from 'next/font/google';
+import Script from 'next/script';
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, SITE_TAGLINE, VERIFICATION, GA4_ID } from '../lib/site.js';
+import Header from './components/Header';
+import Footer from './components/Footer';
 import ServiceWorkerRegister from './components/ServiceWorkerRegister';
+import Analytics from './components/Analytics';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com';
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+  // Preload only the weight range we use; reduces font payload
+  weight: ['400', '500', '600', '700']
+});
 
 export const metadata = {
-  metadataBase: new URL(siteUrl),
-  applicationName: 'Cubic Yard Calculator',
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
+
   title: {
-    default: 'Cubic Yard Calculator | Fast Dirt, Mulch & Concrete Estimator',
-    template: '%s | Cubic Yard Calculator'
+    default: `Cubic Yard Calculator | ${SITE_TAGLINE}`,
+    template: `%s | ${SITE_NAME}`
   },
-  description: 'Free online cubic yard calculator. Quickly calculate the exact volume of mulch, gravel, topsoil, or concrete needed for your project in cubic yards. Includes weight and cost estimators.',
+
+  description: SITE_DESCRIPTION,
+
+  // Canonical is set per-page via alternates.canonical
+  // Layout provides the sitewide fallback only for the homepage
   alternates: {
     canonical: '/'
   },
+
+  // Manifest (App Router generates /manifest.webmanifest)
   manifest: '/manifest.webmanifest',
+
+  // Apple PWA
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Cubic Yard Calculator'
+    title: SITE_NAME
   },
+
+  // Linked icons (Next.js static icons)
+  icons: {
+    icon: [
+      { url: '/icon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' }
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+    shortcut: ['/favicon.ico']
+  },
+
+  // Open Graph
   openGraph: {
     type: 'website',
-    url: siteUrl,
-    title: 'Cubic Yard Calculator | Fast Dirt, Mulch & Concrete Estimator',
-    description: 'Free online cubic yard calculator. Quickly calculate the exact volume of mulch, gravel, topsoil, or concrete needed for your project in cubic yards. Includes weight and cost estimators.',
-    images: [{ url: '/icon.svg' }]
+    siteName: SITE_NAME,
+    locale: 'en_US',
+    url: '/',
+    title: `Cubic Yard Calculator | ${SITE_TAGLINE}`,
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: `${SITE_NAME} — Calculate cubic yards for mulch, concrete, gravel, and topsoil`
+      }
+    ]
   },
+
+  // Twitter
   twitter: {
-    card: 'summary',
-    title: 'Cubic Yard Calculator | Fast Dirt, Mulch & Concrete Estimator',
-    description: 'Free online cubic yard calculator. Quickly calculate the exact volume of mulch, gravel, topsoil, or concrete needed for your project in cubic yards. Includes weight and cost estimators.',
-    images: ['/icon.svg']
+    card: 'summary_large_image',
+    title: `Cubic Yard Calculator | ${SITE_TAGLINE}`,
+    description: SITE_DESCRIPTION,
+    images: [{ url: '/og-image.jpg', alt: 'Cubic Yard Calculator' }]
   },
+
+  // Robots
   robots: {
     index: true,
-    follow: true
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1
+    }
+  },
+
+  // Authors & publisher
+  authors: [{ name: 'Editorial Team', url: `${SITE_URL}/about/` }],
+  publisher: SITE_NAME,
+  category: 'utility',
+
+  // Format detection — prevent iOS from making phone numbers into links
+  formatDetection: { telephone: false },
+
+  // Webmaster verification (set in lib/site.js or env vars)
+  verification: {
+    google: VERIFICATION.google || undefined,
+    other: VERIFICATION.bing ? { 'msvalidate.01': VERIFICATION.bing } : undefined
   }
 };
 
 export const viewport = {
-  themeColor: '#0f172a'
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#0ea5e9' },
+    { media: '(prefers-color-scheme: dark)', color: '#0f172a' }
+  ],
+  width: 'device-width',
+  initialScale: 1
 };
-
-function JsonLd() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'WebApplication',
-        name: 'Cubic Yard Calculator',
-        url: siteUrl + '/',
-        applicationCategory: 'BusinessApplication',
-        operatingSystem: 'All',
-        browserRequirements: 'Requires JavaScript. Works in modern browsers.',
-        description: 'Calculate cubic yards for concrete, gravel, topsoil, mulch, sand, and other bulk materials. Includes waste margin, weight, and cost estimators.',
-        featureList: [
-          'Rectangular slab cubic yard calculator',
-          'Circular area cubic yard calculator',
-          'Triangular area cubic yard calculator',
-          'Cubic feet/inches/meters to cubic yards conversion',
-          'Material weight estimates (lbs and tons)',
-          'Cost estimator per cubic yard or per ton',
-          'Waste margin buffer'
-        ]
-      },
-      {
-        '@type': 'FAQPage',
-        mainEntity: [
-          {
-            '@type': 'Question',
-            name: 'What is a cubic yard?',
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: 'A cubic yard (yd³) is a unit of volume equal to a cube that is 3 feet long × 3 feet wide × 3 feet tall. It equals 27 cubic feet. Bulk materials like mulch, gravel, topsoil, and concrete are commonly sold by the cubic yard.'
-            }
-          },
-          {
-            '@type': 'Question',
-            name: 'How many bags of concrete make a cubic yard?',
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: 'One cubic yard is 27 cubic feet. A typical 80-lb bag yields about 0.60 cu ft (about 45 bags per yard), and a typical 60-lb bag yields about 0.45 cu ft (about 60 bags per yard). Check your bag’s yield label for the most accurate estimate.'
-            }
-          },
-          {
-            '@type': 'Question',
-            name: 'How much area does 1 cubic yard of mulch cover at a 3-inch depth?',
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: 'At 3 inches deep (0.25 ft), 1 cubic yard (27 cu ft) covers about 108 square feet (27 ÷ 0.25). Many landscapers use a quick rule of thumb of about 100 square feet per yard at 3 inches.'
-            }
-          },
-          {
-            '@type': 'Question',
-            name: 'How do you convert cubic feet directly to cubic yards?',
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: 'Divide cubic feet by 27. Example: 54 cu ft ÷ 27 = 2 yd³.'
-            }
-          }
-        ]
-      }
-    ]
-  };
-
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-    />
-  );
-}
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className="bg-slate-50 text-slate-900 antialiased">
-        <ServiceWorkerRegister />
-        <JsonLd />
-
-        <a
-          href="#calculator"
-          className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-3 focus:left-3 bg-white shadow px-3 py-2 rounded"
-        >
-          Skip to calculator
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/*
+          Inline theme script runs BEFORE paint to prevent flash of wrong theme.
+          It reads localStorage then prefers-color-scheme and sets the class.
+          suppressHydrationWarning on <html> prevents React hydration mismatch.
+        */}
+        <Script id="theme-init" strategy="beforeInteractive">{`
+(function(){try{var t=localStorage.getItem('cyc-theme');if(t==='dark'){document.documentElement.classList.add('dark')}else if(t==='light'){document.documentElement.classList.remove('dark')}else if(window.matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.classList.add('dark')}}catch(e){}})();
+        `}</Script>
+      </head>
+      <body className={`${inter.variable} font-sans antialiased bg-[var(--color-bg)] text-[var(--color-text-1)] transition-colors`}>
+        {/* Skip link — first focusable element for keyboard/AT users */}
+        <a href="#main-content" className="skip-link">
+          Skip to main content
         </a>
 
-        <header className="bg-gradient-to-b from-slate-900 to-slate-800 text-white">
-          <div className="mx-auto max-w-5xl px-4 pt-5 pb-6 sm:pt-7 sm:pb-8">
-            <div className="flex flex-col gap-2">
-              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Cubic Yard Calculator</h1>
-              <p className="text-slate-200 text-sm sm:text-base max-w-3xl">
-                Instantly calculate cubic yards for concrete, gravel, topsoil, mulch, sand, and more. Includes waste margin, weight in tons/lbs, and a cost estimator.
-              </p>
-            </div>
+        <Header />
 
-            <nav className="mt-4 flex flex-wrap gap-3 text-sm text-slate-200">
-              <Link className="underline underline-offset-4 hover:text-white" href="/">Calculator</Link>
-              <Link className="underline underline-offset-4 hover:text-white" href="/how-to-calculate-cubic-yards/">How to calculate</Link>
-              <Link className="underline underline-offset-4 hover:text-white" href="/material-weight-per-cubic-yard/">Material weights</Link>
-              <Link className="underline underline-offset-4 hover:text-white" href="/faq/">FAQ</Link>
-            </nav>
-          </div>
-        </header>
+        <main id="main-content" tabIndex={-1}>
+          {children}
+        </main>
 
-        {children}
+        <Footer />
 
-        <footer className="border-t border-slate-200 bg-white">
-          <div className="mx-auto max-w-5xl px-4 py-8 text-sm text-slate-600">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <p><strong>Cubic Yard Calculator</strong> — lightweight, static Next.js export.</p>
-              <p className="text-xs">© {new Date().getFullYear()} • Built for fast field estimates</p>
-            </div>
-          </div>
-        </footer>
+        {/* Service Worker registration (deferred, non-critical) */}
+        <ServiceWorkerRegister />
+
+        {/* Analytics (opt-in, only if env vars set) */}
+        {GA4_ID && <Analytics />}
       </body>
     </html>
   );
