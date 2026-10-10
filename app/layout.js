@@ -132,7 +132,7 @@ export default function RootLayout({ children }) {
 
 
         <meta name="google-site-verification" content="vjVmNeKdMsx_nA_TItPFT9QMjLkwzjbvpXpLR7mVUxQ" />
-
+        <meta name="msvalidate.01" content="12536F4A0E316271BDD70DC96E629807" />
       </head>
       <body className={`${inter.variable} font-sans antialiased bg-[var(--color-bg)] text-[var(--color-text-1)] transition-colors`}>
         {/* Skip link — first focusable element for keyboard/AT users */}
