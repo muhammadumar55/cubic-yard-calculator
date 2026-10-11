@@ -153,6 +153,9 @@ export default function RootLayout({ children }) {
 
         {/* Analytics (opt-in, only if env vars set) */}
         {GA4_ID && <Analytics />}
+
+        {/* Vercel Web Analytics */}
+        <VercelAnalytics />
       </body>
     </html>
   );
